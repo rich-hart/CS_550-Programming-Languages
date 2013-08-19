@@ -1,0 +1,49 @@
+package Example;
+
+import java_cup.runtime.*;
+
+parser code {:
+	public static void main(String args[]) throws Exception {
+		SymbolFactory sf = new DefaultSymbolFactory();
+		if (args.length==0) new Parser(new Scanner(System.in,sf),sf).parse();
+		else new Parser(new Scanner(new java.io.FileInputStream(args[0]),sf),sf).parse();
+	}
+:};
+
+action code {: 
+protected String multipart_name = new String();
+protected String ConCat(String s1,String s2){
+ System.out.println(new String(s1));
+multipart_name = multipart_name.concat("hello");
+multipart_name = multipart_name.concat(" world");
+return multipart_name;
+}
+               :} ;
+
+
+/* Terminals (tokens returned by the scanner). */
+terminal String   COMMA;
+terminal String   LPAREN, RPAREN;
+terminal String   NUMBER;
+
+/* Non-terminals */
+non terminal           list, sequence, listelement;
+
+/* The grammar */
+list ::= LPAREN:s1 sequence:s2 RPAREN:s3 
+		{:RESULT=new String("("+s2+")"); System.out.println(RESULT); :}
+	      |  
+              LPAREN:s1 RPAREN:s2
+              {:RESULT=new String(s1+s2); System.out.println(RESULT); :};
+			
+sequence ::= listelement:s1 COMMA:s2 sequence:s3
+            {:RESULT=new String(s1+","+s3); :}
+ 	      | 
+             listelement:s1 
+             {:RESULT=s1; :};
+
+listelement ::= list:s1
+	        	{: RESULT=s1; :} 
+	      | 
+              NUMBER:s1         
+	          {: RESULT=s1; :} ;
