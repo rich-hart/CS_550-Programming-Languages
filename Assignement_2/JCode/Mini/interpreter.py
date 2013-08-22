@@ -30,6 +30,7 @@ from programext import *
 from ply import lex
 
 tokens = (
+	'NAME',
 	'PLUS',
 	'MINUS',
 	'TIMES',
@@ -81,6 +82,8 @@ t_RPAREN	= r'\)'
 t_ASSIGNOP = r':='
 t_SEMICOLON = r';'
 t_COMMA		= r','
+t_NAME    = ur'[a-zA-Z_][a-zA-Z0-9_]*'
+
 
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -187,6 +190,14 @@ def p_fact_IDENT( p ) :
 def p_fact_funcall( p ) :
 	'fact : func_call'
 	p[0] = p[1]
+
+def p_fact_name(p):
+	'fact : NAME'
+	try:
+		p[0] = names[p[1]]
+	except LookupError:
+		print "Undefined name '%s'" % p[1]
+		p[0] = 0
 
 def p_assn( p ) :
 	'assign_stmt : IDENT ASSIGNOP expr'

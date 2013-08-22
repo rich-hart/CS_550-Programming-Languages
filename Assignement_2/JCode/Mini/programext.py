@@ -40,7 +40,8 @@
 #		factor:     '(' expr ')'  
 #		    |       NUMBER 
 #		    |       IDENT 
-#		    |       funcall 
+#		    |       funcall
+#			|		NAME
 #		funcall:  IDENT '(' expr_list ')'
 #		expr_list: expr ',' expr_list 
 #		    |      expr 
