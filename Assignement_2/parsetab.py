@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '\xef\x19\xb0\xae\xb8!\x008a\xec,\x85JK\xa0j'
+_lr_signature = '\xbb\xf5A\xf20\x12\xe7y\x18\xe98)@.\xe1\x0f'
     
-_lr_action_items = {'COMMA':([3,5,6,7,8,],[-2,-5,-6,9,-1,]),'RPAREN':([2,3,4,5,6,7,8,10,],[3,-2,8,-5,-6,-4,-1,-3,]),'NUMBER':([2,9,],[6,6,]),'LPAREN':([0,2,9,],[2,2,2,]),'$end':([1,3,8,],[0,-2,-1,]),}
+_lr_action_items = {'LBRACKET':([0,1,9,],[1,1,1,]),'RBRACKET':([1,3,4,5,6,7,8,10,],[6,8,-5,-6,-2,-4,-1,-3,]),'COMMA':([4,5,6,7,8,],[-5,-6,-2,9,-1,]),'NUMBER':([1,9,],[5,5,]),'$end':([2,6,8,],[0,-2,-1,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'listelement':([2,9,],[7,7,]),'list':([0,2,9,],[1,5,5,]),'sequence':([2,9,],[4,10,]),}
+_lr_goto_items = {'listelement':([1,9,],[7,7,]),'list':([0,1,9,],[2,4,4,]),'sequence':([1,9,],[3,10,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,10 +26,10 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> list","S'",1,None,None,None),
-  ('list -> LPAREN sequence RPAREN','list',3,'p_list','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',41),
-  ('list -> LPAREN RPAREN','list',2,'p_list','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',42),
-  ('sequence -> listelement COMMA sequence','sequence',3,'p_sequence','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',49),
-  ('sequence -> listelement','sequence',1,'p_sequence','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',50),
-  ('listelement -> list','listelement',1,'p_listelement','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',57),
-  ('listelement -> NUMBER','listelement',1,'p_listelement','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',58),
+  ('list -> LBRACKET sequence RBRACKET','list',3,'p_list','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',43),
+  ('list -> LBRACKET RBRACKET','list',2,'p_list','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',44),
+  ('sequence -> listelement COMMA sequence','sequence',3,'p_sequence','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',51),
+  ('sequence -> listelement','sequence',1,'p_sequence','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',52),
+  ('listelement -> list','listelement',1,'p_listelement','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',59),
+  ('listelement -> NUMBER','listelement',1,'p_listelement','/Users/richardhart/Dropbox/Drexel/Spring2013/ProgrammingLanguages/Assignments/Assignement_2/AssignmentPart1_2.py',60),
 ]

@@ -7,15 +7,17 @@
 
 import sys
 import os
+from ListExt import *
+from programext import *
 sys.path.insert(0,"../..")
 
 if sys.version_info[0] >= 3:
     raw_input = input
 
-tokens = ('NUMBER','LPAREN','RPAREN','COMMA')
+tokens = ('NUMBER','LBRACKET','RBRACKET','COMMA')
 
-t_LPAREN	= r'\('
-t_RPAREN	= r'\)'
+t_LBRACKET	= r'\['
+t_RBRACKET	= r'\]'
 t_COMMA	= r'\,'
 t_NUMBER = r'[0-9]+'
 # Tokens
@@ -35,23 +37,26 @@ lex.lex()
 
 # Parsing rules
 
-saved_list=""
+
 
 def p_list(p):
-	'''list : LPAREN sequence RPAREN
-			| LPAREN RPAREN'''
-	if p[2] == ')':
-		p[0] = p[1] + p[2] 
+	'''list : LBRACKET sequence RBRACKET
+			| LBRACKET RBRACKET'''
+	if len( p ) == 4:
+		p[0] =p[2]
 	else:
-		p[0] = "(" + p[2] + ")" 
+		p[0] = []
 
 def p_sequence(p):
 	'''sequence : listelement COMMA sequence
 				| listelement'''
-	if len(p) > 2:
-		p[0] = p[1] + "," + p[3]
+	
+	if len( p ) ==2:
+		p[0] = [p[1]]
 	else:
-		p[0] = p[1]
+		p[3].insert( 0,p[1])
+		p[0] = p[3]
+		
 
 def p_listelement(p):
 	'''listelement : list
@@ -75,7 +80,7 @@ def main( arg=sys.argv ) :
 	raw_file = Input_File.read()
 	print "raw_file: " + raw_file
 	result = yacc.parse(raw_file)
-	print "parsed file: "+ result
+	print result
 
 if __name__ == '__main__' :
 	main()
