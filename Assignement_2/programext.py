@@ -211,6 +211,25 @@ class AssignStmt( Stmt ) :
 		print "%sAssign: %s :=" % (tabstop*depth, self.name)
 		self.rhs.display( nt, ft, depth+1 )
 
+class AssignListStmt( Stmt ) :
+	'''adds/modifies symbol in the current context'''
+
+	def __init__( self, name, rhs ) :
+		'''stores the symbol for the l-val, and the expressions which is the rhs'''
+		self.name = name
+		self.rhs = rhs
+
+	def eval( self, nt, ft ) :
+		nt[ self.name ] = self.rhs
+
+	def display( self, nt, ft, depth=0 ) :
+		print "%sAssign: %s :=" % (tabstop*depth, self.name)
+		self.rhs.display( nt, ft, depth+1 )
+	
+	def display( self, nt, ft, depth=0 ) :
+		print "%sSTMT LIST" % (tabstop*depth)
+		for s in self.sl :
+			s.display( nt, ft, depth+1 )
 
 class DefineStmt( Stmt ) :
 	'''Binds a proc object to a name'''

@@ -30,7 +30,7 @@ import SetOperations
 
 from ply import lex
 
-mini_tokens = (
+tokens = (
 	'PLUS',
 	'MINUS',
 	'TIMES',
@@ -50,10 +50,11 @@ mini_tokens = (
 	'DEFINE',
 	'PROC',
 	'END',
-	'IDENT'
+	'IDENT',
+	'LBRACKET',
+	'RBRACKET'
 )
 
-tokens = SetOperations.union(AssignmentPart1_2.tokens,mini_tokens)
 
 
 
@@ -86,6 +87,8 @@ t_RPAREN	= r'\)'
 t_ASSIGNOP = r':='
 t_SEMICOLON = r';'
 t_COMMA		= r','
+t_LBRACKET	= r'\['
+t_RBRACKET	= r'\]'
 
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -192,10 +195,46 @@ def p_fact_IDENT( p ) :
 def p_fact_funcall( p ) :
 	'fact : func_call'
 	p[0] = p[1]
+########
 
 def p_assn( p ) :
-	'assign_stmt : IDENT ASSIGNOP expr'
+	'''assign_stmt : assign_stmt_expr
+					| assign_stmt_list'''
+	p[0] =  p[1]
+
+def p_assn_expr( p ) :
+	'''assign_stmt_expr : IDENT ASSIGNOP expr'''
 	p[0] = AssignStmt( p[1], p[3] )
+	
+def p_assn_list( p ) :
+	'''assign_stmt_list : IDENT ASSIGNOP list'''
+	p[0] = AssignListStmt( p[1], p[3] )
+
+def p_list(p):
+	'''list : LBRACKET sequence RBRACKET
+			| LBRACKET RBRACKET'''
+	if len( p ) == 4:
+		p[0] =p[2]
+	else:
+		p[0] = []
+
+def p_sequence(p):
+	'''sequence : listelement COMMA sequence
+				| listelement'''
+
+	if len( p ) ==2:
+		p[0] = [p[1]]
+	else:
+		p[3].insert( 0,p[1])
+		p[0] = p[3]
+
+
+def p_listelement(p):
+	'''listelement : list
+				   | NUMBER'''
+	p[0] = p[1]
+
+#########
 
 def p_while( p ) :
 	'while_stmt : WHILE expr DO stmt_list OD'
@@ -270,7 +309,9 @@ def test_parser( arg=sys.argv ) :
 	  while i do s := s + i;  i := i-1 od;
 	  return := s
 	end;
+	y:=[1,2,[
 
+	3,4]];
 	x := 7;
 	if x then
 	  s := sum(x)
