@@ -322,8 +322,8 @@ def p_intp ( p ):
 			| INTP LPAREN list RPAREN'''
 	para_type = type(p[3]) 
 	list_type = type([])
-	is_List = list_type==para_type
-	in_Numb = False == is_List
+	is_List = (list_type==para_type)
+	in_Numb = (False == is_List)
 	print(in_Numb)
 	if (in_Numb) :
 		p[0] = Number(1)
@@ -368,8 +368,8 @@ def test_parser( arg=sys.argv ) :
 	#	fi'''
 
 	#data = 'if 5 then x := 13 else x:=0 fi'
-	data = 'x:=intp(4)'
-	#data='y:=intp([1,2,[3,4]])'
+	#data = 'x:=intp(4)'
+	data='y:=intp([1,2,[3,4]])'
 	if False:
 		data = '''
 		define sum 
