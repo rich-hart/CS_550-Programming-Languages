@@ -45,8 +45,8 @@ Rule 31    define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list E
 Rule 32    param_list -> IDENT COMMA param_list
 Rule 33    param_list -> IDENT
 Rule 34    func_call -> IDENT LPAREN expr_list RPAREN
-Rule 35    intp_stmt -> INTP LPAREN expr RPAREN
-Rule 36    intp_stmt -> INTP LPAREN list RPAREN
+Rule 35    term -> INTP LPAREN expr RPAREN
+Rule 36    term -> INTP LPAREN list RPAREN
 
 Terminals, with rules where they appear
 
@@ -91,7 +91,6 @@ expr_list            : 10 34
 fact                 : 13 14
 func_call            : 18
 if_stmt              : 6
-intp_stmt            : 
 list                 : 22 27 36
 listelement          : 25 26
 param_list           : 31 32
@@ -145,20 +144,23 @@ state 1
     (12) expr -> . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
     term                           shift and go to state 14
     expr                           shift and go to state 17
-    fact                           shift and go to state 20
+    fact                           shift and go to state 21
 
 state 2
 
@@ -168,8 +170,8 @@ state 2
     ELSE            reduce using rule 7 (stmt -> define_stmt .)
     END             reduce using rule 7 (stmt -> define_stmt .)
     FI              reduce using rule 7 (stmt -> define_stmt .)
-    $end            reduce using rule 7 (stmt -> define_stmt .)
     OD              reduce using rule 7 (stmt -> define_stmt .)
+    $end            reduce using rule 7 (stmt -> define_stmt .)
 
 
 state 3
@@ -180,8 +182,8 @@ state 3
     ELSE            reduce using rule 4 (stmt -> assign_stmt .)
     END             reduce using rule 4 (stmt -> assign_stmt .)
     FI              reduce using rule 4 (stmt -> assign_stmt .)
-    $end            reduce using rule 4 (stmt -> assign_stmt .)
     OD              reduce using rule 4 (stmt -> assign_stmt .)
+    $end            reduce using rule 4 (stmt -> assign_stmt .)
 
 
 state 4
@@ -194,7 +196,7 @@ state 5
 
     (31) define_stmt -> DEFINE . IDENT PROC LPAREN param_list RPAREN stmt_list END
 
-    IDENT           shift and go to state 21
+    IDENT           shift and go to state 22
 
 
 state 6
@@ -202,7 +204,7 @@ state 6
     (21) assign_stmt_expr -> IDENT . ASSIGNOP expr
     (22) assign_stmt_list -> IDENT . ASSIGNOP list
 
-    ASSIGNOP        shift and go to state 22
+    ASSIGNOP        shift and go to state 23
 
 
 state 7
@@ -210,11 +212,11 @@ state 7
     (2) stmt_list -> stmt . SEMICOLON stmt_list
     (3) stmt_list -> stmt .
 
-    SEMICOLON       shift and go to state 23
+    SEMICOLON       shift and go to state 24
+    FI              reduce using rule 3 (stmt_list -> stmt .)
     $end            reduce using rule 3 (stmt_list -> stmt .)
     OD              reduce using rule 3 (stmt_list -> stmt .)
     ELSE            reduce using rule 3 (stmt_list -> stmt .)
-    FI              reduce using rule 3 (stmt_list -> stmt .)
     END             reduce using rule 3 (stmt_list -> stmt .)
 
 
@@ -250,20 +252,23 @@ state 10
     (12) expr -> . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
     term                           shift and go to state 14
-    expr                           shift and go to state 24
-    fact                           shift and go to state 20
+    expr                           shift and go to state 25
+    fact                           shift and go to state 21
 
 state 11
 
@@ -280,8 +285,8 @@ state 12
     ELSE            reduce using rule 6 (stmt -> if_stmt .)
     END             reduce using rule 6 (stmt -> if_stmt .)
     FI              reduce using rule 6 (stmt -> if_stmt .)
-    $end            reduce using rule 6 (stmt -> if_stmt .)
     OD              reduce using rule 6 (stmt -> if_stmt .)
+    $end            reduce using rule 6 (stmt -> if_stmt .)
 
 
 state 13
@@ -292,8 +297,8 @@ state 13
     ELSE            reduce using rule 5 (stmt -> while_stmt .)
     END             reduce using rule 5 (stmt -> while_stmt .)
     FI              reduce using rule 5 (stmt -> while_stmt .)
-    $end            reduce using rule 5 (stmt -> while_stmt .)
     OD              reduce using rule 5 (stmt -> while_stmt .)
+    $end            reduce using rule 5 (stmt -> while_stmt .)
 
 
 state 14
@@ -304,16 +309,16 @@ state 14
     THEN            reduce using rule 12 (expr -> term .)
     PLUS            reduce using rule 12 (expr -> term .)
     MINUS           reduce using rule 12 (expr -> term .)
-    RPAREN          reduce using rule 12 (expr -> term .)
-    COMMA           reduce using rule 12 (expr -> term .)
     SEMICOLON       reduce using rule 12 (expr -> term .)
     $end            reduce using rule 12 (expr -> term .)
     OD              reduce using rule 12 (expr -> term .)
     ELSE            reduce using rule 12 (expr -> term .)
     FI              reduce using rule 12 (expr -> term .)
     END             reduce using rule 12 (expr -> term .)
+    COMMA           reduce using rule 12 (expr -> term .)
+    RPAREN          reduce using rule 12 (expr -> term .)
     DO              reduce using rule 12 (expr -> term .)
-    TIMES           shift and go to state 25
+    TIMES           shift and go to state 26
 
 
 state 15
@@ -322,19 +327,19 @@ state 15
     (34) func_call -> IDENT . LPAREN expr_list RPAREN
 
     TIMES           reduce using rule 17 (fact -> IDENT .)
-    RPAREN          reduce using rule 17 (fact -> IDENT .)
+    COMMA           reduce using rule 17 (fact -> IDENT .)
     PLUS            reduce using rule 17 (fact -> IDENT .)
     MINUS           reduce using rule 17 (fact -> IDENT .)
-    DO              reduce using rule 17 (fact -> IDENT .)
-    THEN            reduce using rule 17 (fact -> IDENT .)
+    RPAREN          reduce using rule 17 (fact -> IDENT .)
     SEMICOLON       reduce using rule 17 (fact -> IDENT .)
     $end            reduce using rule 17 (fact -> IDENT .)
     OD              reduce using rule 17 (fact -> IDENT .)
     ELSE            reduce using rule 17 (fact -> IDENT .)
     FI              reduce using rule 17 (fact -> IDENT .)
     END             reduce using rule 17 (fact -> IDENT .)
-    COMMA           reduce using rule 17 (fact -> IDENT .)
-    LPAREN          shift and go to state 26
+    DO              reduce using rule 17 (fact -> IDENT .)
+    THEN            reduce using rule 17 (fact -> IDENT .)
+    LPAREN          shift and go to state 27
 
 
 state 16
@@ -342,18 +347,18 @@ state 16
     (18) fact -> func_call .
 
     TIMES           reduce using rule 18 (fact -> func_call .)
-    RPAREN          reduce using rule 18 (fact -> func_call .)
+    COMMA           reduce using rule 18 (fact -> func_call .)
     PLUS            reduce using rule 18 (fact -> func_call .)
     MINUS           reduce using rule 18 (fact -> func_call .)
-    DO              reduce using rule 18 (fact -> func_call .)
-    THEN            reduce using rule 18 (fact -> func_call .)
+    RPAREN          reduce using rule 18 (fact -> func_call .)
     SEMICOLON       reduce using rule 18 (fact -> func_call .)
     $end            reduce using rule 18 (fact -> func_call .)
     OD              reduce using rule 18 (fact -> func_call .)
     ELSE            reduce using rule 18 (fact -> func_call .)
     FI              reduce using rule 18 (fact -> func_call .)
     END             reduce using rule 18 (fact -> func_call .)
-    COMMA           reduce using rule 18 (fact -> func_call .)
+    DO              reduce using rule 18 (fact -> func_call .)
+    THEN            reduce using rule 18 (fact -> func_call .)
 
 
 state 17
@@ -362,9 +367,9 @@ state 17
     (8) expr -> expr . PLUS term
     (9) expr -> expr . MINUS term
 
-    DO              shift and go to state 27
-    PLUS            shift and go to state 28
-    MINUS           shift and go to state 29
+    DO              shift and go to state 28
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
 
 
 state 18
@@ -372,21 +377,29 @@ state 18
     (16) fact -> NUMBER .
 
     TIMES           reduce using rule 16 (fact -> NUMBER .)
-    RPAREN          reduce using rule 16 (fact -> NUMBER .)
+    COMMA           reduce using rule 16 (fact -> NUMBER .)
     PLUS            reduce using rule 16 (fact -> NUMBER .)
     MINUS           reduce using rule 16 (fact -> NUMBER .)
-    DO              reduce using rule 16 (fact -> NUMBER .)
-    THEN            reduce using rule 16 (fact -> NUMBER .)
+    RPAREN          reduce using rule 16 (fact -> NUMBER .)
     SEMICOLON       reduce using rule 16 (fact -> NUMBER .)
     $end            reduce using rule 16 (fact -> NUMBER .)
     OD              reduce using rule 16 (fact -> NUMBER .)
     ELSE            reduce using rule 16 (fact -> NUMBER .)
     FI              reduce using rule 16 (fact -> NUMBER .)
     END             reduce using rule 16 (fact -> NUMBER .)
-    COMMA           reduce using rule 16 (fact -> NUMBER .)
+    DO              reduce using rule 16 (fact -> NUMBER .)
+    THEN            reduce using rule 16 (fact -> NUMBER .)
 
 
 state 19
+
+    (35) term -> INTP . LPAREN expr RPAREN
+    (36) term -> INTP . LPAREN list RPAREN
+
+    LPAREN          shift and go to state 31
+
+
+state 20
 
     (15) fact -> LPAREN . expr RPAREN
     (8) expr -> . expr PLUS term
@@ -394,22 +407,25 @@ state 19
     (12) expr -> . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    expr                           shift and go to state 30
     term                           shift and go to state 14
-    fact                           shift and go to state 20
+    expr                           shift and go to state 32
+    fact                           shift and go to state 21
 
-state 20
+state 21
 
     (14) term -> fact .
 
@@ -422,20 +438,20 @@ state 20
     ELSE            reduce using rule 14 (term -> fact .)
     FI              reduce using rule 14 (term -> fact .)
     END             reduce using rule 14 (term -> fact .)
-    COMMA           reduce using rule 14 (term -> fact .)
     RPAREN          reduce using rule 14 (term -> fact .)
+    COMMA           reduce using rule 14 (term -> fact .)
     THEN            reduce using rule 14 (term -> fact .)
     DO              reduce using rule 14 (term -> fact .)
 
 
-state 21
+state 22
 
     (31) define_stmt -> DEFINE IDENT . PROC LPAREN param_list RPAREN stmt_list END
 
-    PROC            shift and go to state 31
+    PROC            shift and go to state 33
 
 
-state 22
+state 23
 
     (21) assign_stmt_expr -> IDENT ASSIGNOP . expr
     (22) assign_stmt_list -> IDENT ASSIGNOP . list
@@ -446,24 +462,27 @@ state 22
     (24) list -> . LBRACKET RBRACKET
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LBRACKET        shift and go to state 34
-    LPAREN          shift and go to state 19
+    LBRACKET        shift and go to state 36
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
     term                           shift and go to state 14
-    expr                           shift and go to state 32
-    list                           shift and go to state 33
-    fact                           shift and go to state 20
+    expr                           shift and go to state 34
+    list                           shift and go to state 35
+    fact                           shift and go to state 21
 
-state 23
+state 24
 
     (2) stmt_list -> stmt SEMICOLON . stmt_list
     (2) stmt_list -> . stmt SEMICOLON stmt_list
@@ -485,7 +504,7 @@ state 23
     DEFINE          shift and go to state 5
     IDENT           shift and go to state 6
 
-    stmt_list                      shift and go to state 35
+    stmt_list                      shift and go to state 37
     if_stmt                        shift and go to state 12
     define_stmt                    shift and go to state 2
     stmt                           shift and go to state 7
@@ -494,18 +513,18 @@ state 23
     assign_stmt_list               shift and go to state 8
     assign_stmt_expr               shift and go to state 9
 
-state 24
+state 25
 
     (30) if_stmt -> IF expr . THEN stmt_list ELSE stmt_list FI
     (8) expr -> expr . PLUS term
     (9) expr -> expr . MINUS term
 
-    THEN            shift and go to state 36
-    PLUS            shift and go to state 28
-    MINUS           shift and go to state 29
+    THEN            shift and go to state 38
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
 
 
-state 25
+state 26
 
     (13) term -> term TIMES . fact
     (15) fact -> . LPAREN expr RPAREN
@@ -514,14 +533,14 @@ state 25
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    fact                           shift and go to state 37
+    fact                           shift and go to state 39
 
-state 26
+state 27
 
     (34) func_call -> IDENT LPAREN . expr_list RPAREN
     (10) expr_list -> . expr COMMA expr_list
@@ -531,23 +550,26 @@ state 26
     (12) expr -> . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    expr_list                      shift and go to state 38
     term                           shift and go to state 14
-    fact                           shift and go to state 20
-    expr                           shift and go to state 39
+    expr_list                      shift and go to state 40
+    expr                           shift and go to state 41
+    fact                           shift and go to state 21
 
-state 27
+state 28
 
     (29) while_stmt -> WHILE expr DO . stmt_list OD
     (2) stmt_list -> . stmt SEMICOLON stmt_list
@@ -569,7 +591,7 @@ state 27
     DEFINE          shift and go to state 5
     IDENT           shift and go to state 6
 
-    stmt_list                      shift and go to state 40
+    stmt_list                      shift and go to state 42
     if_stmt                        shift and go to state 12
     define_stmt                    shift and go to state 2
     stmt                           shift and go to state 7
@@ -578,63 +600,100 @@ state 27
     assign_stmt_list               shift and go to state 8
     assign_stmt_expr               shift and go to state 9
 
-state 28
+state 29
 
     (8) expr -> expr PLUS . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    term                           shift and go to state 41
-    fact                           shift and go to state 20
+    term                           shift and go to state 43
+    fact                           shift and go to state 21
 
-state 29
+state 30
 
     (9) expr -> expr MINUS . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    term                           shift and go to state 42
-    fact                           shift and go to state 20
+    term                           shift and go to state 44
+    fact                           shift and go to state 21
 
-state 30
+state 31
+
+    (35) term -> INTP LPAREN . expr RPAREN
+    (36) term -> INTP LPAREN . list RPAREN
+    (8) expr -> . expr PLUS term
+    (9) expr -> . expr MINUS term
+    (12) expr -> . term
+    (23) list -> . LBRACKET sequence RBRACKET
+    (24) list -> . LBRACKET RBRACKET
+    (13) term -> . term TIMES fact
+    (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
+    (15) fact -> . LPAREN expr RPAREN
+    (16) fact -> . NUMBER
+    (17) fact -> . IDENT
+    (18) fact -> . func_call
+    (34) func_call -> . IDENT LPAREN expr_list RPAREN
+
+    LBRACKET        shift and go to state 36
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
+    NUMBER          shift and go to state 18
+    IDENT           shift and go to state 15
+
+    func_call                      shift and go to state 16
+    term                           shift and go to state 14
+    expr                           shift and go to state 45
+    list                           shift and go to state 46
+    fact                           shift and go to state 21
+
+state 32
 
     (15) fact -> LPAREN expr . RPAREN
     (8) expr -> expr . PLUS term
     (9) expr -> expr . MINUS term
 
-    RPAREN          shift and go to state 43
-    PLUS            shift and go to state 28
-    MINUS           shift and go to state 29
+    RPAREN          shift and go to state 47
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
 
 
-state 31
+state 33
 
     (31) define_stmt -> DEFINE IDENT PROC . LPAREN param_list RPAREN stmt_list END
 
-    LPAREN          shift and go to state 44
+    LPAREN          shift and go to state 48
 
 
-state 32
+state 34
 
     (21) assign_stmt_expr -> IDENT ASSIGNOP expr .
     (8) expr -> expr . PLUS term
@@ -642,27 +701,27 @@ state 32
 
     SEMICOLON       reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
     ELSE            reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
-    END             reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
     FI              reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
-    $end            reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
     OD              reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
-    PLUS            shift and go to state 28
-    MINUS           shift and go to state 29
+    $end            reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
+    END             reduce using rule 21 (assign_stmt_expr -> IDENT ASSIGNOP expr .)
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
 
 
-state 33
+state 35
 
     (22) assign_stmt_list -> IDENT ASSIGNOP list .
 
     SEMICOLON       reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
-    ELSE            reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
     FI              reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
+    ELSE            reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
     OD              reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
     $end            reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
     END             reduce using rule 22 (assign_stmt_list -> IDENT ASSIGNOP list .)
 
 
-state 34
+state 36
 
     (23) list -> LBRACKET . sequence RBRACKET
     (24) list -> LBRACKET . RBRACKET
@@ -673,26 +732,26 @@ state 34
     (23) list -> . LBRACKET sequence RBRACKET
     (24) list -> . LBRACKET RBRACKET
 
-    RBRACKET        shift and go to state 48
-    NUMBER          shift and go to state 47
-    LBRACKET        shift and go to state 34
+    RBRACKET        shift and go to state 52
+    NUMBER          shift and go to state 51
+    LBRACKET        shift and go to state 36
 
-    listelement                    shift and go to state 49
-    list                           shift and go to state 46
-    sequence                       shift and go to state 45
+    listelement                    shift and go to state 53
+    list                           shift and go to state 50
+    sequence                       shift and go to state 49
 
-state 35
+state 37
 
     (2) stmt_list -> stmt SEMICOLON stmt_list .
 
+    FI              reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
     $end            reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
     OD              reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
     ELSE            reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
-    FI              reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
     END             reduce using rule 2 (stmt_list -> stmt SEMICOLON stmt_list .)
 
 
-state 36
+state 38
 
     (30) if_stmt -> IF expr THEN . stmt_list ELSE stmt_list FI
     (2) stmt_list -> . stmt SEMICOLON stmt_list
@@ -714,7 +773,7 @@ state 36
     DEFINE          shift and go to state 5
     IDENT           shift and go to state 6
 
-    stmt_list                      shift and go to state 50
+    stmt_list                      shift and go to state 54
     if_stmt                        shift and go to state 12
     define_stmt                    shift and go to state 2
     stmt                           shift and go to state 7
@@ -723,7 +782,7 @@ state 36
     assign_stmt_list               shift and go to state 8
     assign_stmt_expr               shift and go to state 9
 
-state 37
+state 39
 
     (13) term -> term TIMES fact .
 
@@ -736,40 +795,40 @@ state 37
     ELSE            reduce using rule 13 (term -> term TIMES fact .)
     FI              reduce using rule 13 (term -> term TIMES fact .)
     END             reduce using rule 13 (term -> term TIMES fact .)
-    COMMA           reduce using rule 13 (term -> term TIMES fact .)
     RPAREN          reduce using rule 13 (term -> term TIMES fact .)
+    COMMA           reduce using rule 13 (term -> term TIMES fact .)
     THEN            reduce using rule 13 (term -> term TIMES fact .)
     DO              reduce using rule 13 (term -> term TIMES fact .)
 
 
-state 38
+state 40
 
     (34) func_call -> IDENT LPAREN expr_list . RPAREN
 
-    RPAREN          shift and go to state 51
+    RPAREN          shift and go to state 55
 
 
-state 39
+state 41
 
     (10) expr_list -> expr . COMMA expr_list
     (11) expr_list -> expr .
     (8) expr -> expr . PLUS term
     (9) expr -> expr . MINUS term
 
-    COMMA           shift and go to state 52
+    COMMA           shift and go to state 56
     RPAREN          reduce using rule 11 (expr_list -> expr .)
-    PLUS            shift and go to state 28
-    MINUS           shift and go to state 29
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
 
 
-state 40
+state 42
 
     (29) while_stmt -> WHILE expr DO stmt_list . OD
 
-    OD              shift and go to state 53
+    OD              shift and go to state 57
 
 
-state 41
+state 43
 
     (8) expr -> expr PLUS term .
     (13) term -> term . TIMES fact
@@ -777,19 +836,19 @@ state 41
     THEN            reduce using rule 8 (expr -> expr PLUS term .)
     PLUS            reduce using rule 8 (expr -> expr PLUS term .)
     MINUS           reduce using rule 8 (expr -> expr PLUS term .)
-    RPAREN          reduce using rule 8 (expr -> expr PLUS term .)
-    COMMA           reduce using rule 8 (expr -> expr PLUS term .)
     SEMICOLON       reduce using rule 8 (expr -> expr PLUS term .)
     $end            reduce using rule 8 (expr -> expr PLUS term .)
     OD              reduce using rule 8 (expr -> expr PLUS term .)
     ELSE            reduce using rule 8 (expr -> expr PLUS term .)
     FI              reduce using rule 8 (expr -> expr PLUS term .)
     END             reduce using rule 8 (expr -> expr PLUS term .)
+    COMMA           reduce using rule 8 (expr -> expr PLUS term .)
+    RPAREN          reduce using rule 8 (expr -> expr PLUS term .)
     DO              reduce using rule 8 (expr -> expr PLUS term .)
-    TIMES           shift and go to state 25
+    TIMES           shift and go to state 26
 
 
-state 42
+state 44
 
     (9) expr -> expr MINUS term .
     (13) term -> term . TIMES fact
@@ -797,55 +856,73 @@ state 42
     THEN            reduce using rule 9 (expr -> expr MINUS term .)
     PLUS            reduce using rule 9 (expr -> expr MINUS term .)
     MINUS           reduce using rule 9 (expr -> expr MINUS term .)
-    RPAREN          reduce using rule 9 (expr -> expr MINUS term .)
-    COMMA           reduce using rule 9 (expr -> expr MINUS term .)
     SEMICOLON       reduce using rule 9 (expr -> expr MINUS term .)
     $end            reduce using rule 9 (expr -> expr MINUS term .)
     OD              reduce using rule 9 (expr -> expr MINUS term .)
     ELSE            reduce using rule 9 (expr -> expr MINUS term .)
     FI              reduce using rule 9 (expr -> expr MINUS term .)
     END             reduce using rule 9 (expr -> expr MINUS term .)
+    COMMA           reduce using rule 9 (expr -> expr MINUS term .)
+    RPAREN          reduce using rule 9 (expr -> expr MINUS term .)
     DO              reduce using rule 9 (expr -> expr MINUS term .)
-    TIMES           shift and go to state 25
+    TIMES           shift and go to state 26
 
 
-state 43
+state 45
+
+    (35) term -> INTP LPAREN expr . RPAREN
+    (8) expr -> expr . PLUS term
+    (9) expr -> expr . MINUS term
+
+    RPAREN          shift and go to state 58
+    PLUS            shift and go to state 29
+    MINUS           shift and go to state 30
+
+
+state 46
+
+    (36) term -> INTP LPAREN list . RPAREN
+
+    RPAREN          shift and go to state 59
+
+
+state 47
 
     (15) fact -> LPAREN expr RPAREN .
 
     TIMES           reduce using rule 15 (fact -> LPAREN expr RPAREN .)
-    RPAREN          reduce using rule 15 (fact -> LPAREN expr RPAREN .)
+    COMMA           reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     PLUS            reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     MINUS           reduce using rule 15 (fact -> LPAREN expr RPAREN .)
-    DO              reduce using rule 15 (fact -> LPAREN expr RPAREN .)
-    THEN            reduce using rule 15 (fact -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     SEMICOLON       reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     $end            reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     OD              reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     ELSE            reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     FI              reduce using rule 15 (fact -> LPAREN expr RPAREN .)
     END             reduce using rule 15 (fact -> LPAREN expr RPAREN .)
-    COMMA           reduce using rule 15 (fact -> LPAREN expr RPAREN .)
+    DO              reduce using rule 15 (fact -> LPAREN expr RPAREN .)
+    THEN            reduce using rule 15 (fact -> LPAREN expr RPAREN .)
 
 
-state 44
+state 48
 
     (31) define_stmt -> DEFINE IDENT PROC LPAREN . param_list RPAREN stmt_list END
     (32) param_list -> . IDENT COMMA param_list
     (33) param_list -> . IDENT
 
-    IDENT           shift and go to state 54
+    IDENT           shift and go to state 60
 
-    param_list                     shift and go to state 55
+    param_list                     shift and go to state 61
 
-state 45
+state 49
 
     (23) list -> LBRACKET sequence . RBRACKET
 
-    RBRACKET        shift and go to state 56
+    RBRACKET        shift and go to state 62
 
 
-state 46
+state 50
 
     (27) listelement -> list .
 
@@ -853,7 +930,7 @@ state 46
     RBRACKET        reduce using rule 27 (listelement -> list .)
 
 
-state 47
+state 51
 
     (28) listelement -> NUMBER .
 
@@ -861,12 +938,13 @@ state 47
     RBRACKET        reduce using rule 28 (listelement -> NUMBER .)
 
 
-state 48
+state 52
 
     (24) list -> LBRACKET RBRACKET .
 
     COMMA           reduce using rule 24 (list -> LBRACKET RBRACKET .)
     RBRACKET        reduce using rule 24 (list -> LBRACKET RBRACKET .)
+    RPAREN          reduce using rule 24 (list -> LBRACKET RBRACKET .)
     SEMICOLON       reduce using rule 24 (list -> LBRACKET RBRACKET .)
     $end            reduce using rule 24 (list -> LBRACKET RBRACKET .)
     OD              reduce using rule 24 (list -> LBRACKET RBRACKET .)
@@ -875,31 +953,31 @@ state 48
     END             reduce using rule 24 (list -> LBRACKET RBRACKET .)
 
 
-state 49
+state 53
 
     (25) sequence -> listelement . COMMA sequence
     (26) sequence -> listelement .
 
-    COMMA           shift and go to state 57
+    COMMA           shift and go to state 63
     RBRACKET        reduce using rule 26 (sequence -> listelement .)
 
 
-state 50
+state 54
 
     (30) if_stmt -> IF expr THEN stmt_list . ELSE stmt_list FI
 
-    ELSE            shift and go to state 58
+    ELSE            shift and go to state 64
 
 
-state 51
+state 55
 
     (34) func_call -> IDENT LPAREN expr_list RPAREN .
 
     TIMES           reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
-    THEN            reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    DO              reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
     PLUS            reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
     MINUS           reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
-    DO              reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
+    THEN            reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
     RPAREN          reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
     SEMICOLON       reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
     $end            reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
@@ -910,7 +988,7 @@ state 51
     COMMA           reduce using rule 34 (func_call -> IDENT LPAREN expr_list RPAREN .)
 
 
-state 52
+state 56
 
     (10) expr_list -> expr COMMA . expr_list
     (10) expr_list -> . expr COMMA expr_list
@@ -920,56 +998,98 @@ state 52
     (12) expr -> . term
     (13) term -> . term TIMES fact
     (14) term -> . fact
+    (35) term -> . INTP LPAREN expr RPAREN
+    (36) term -> . INTP LPAREN list RPAREN
     (15) fact -> . LPAREN expr RPAREN
     (16) fact -> . NUMBER
     (17) fact -> . IDENT
     (18) fact -> . func_call
     (34) func_call -> . IDENT LPAREN expr_list RPAREN
 
-    LPAREN          shift and go to state 19
+    INTP            shift and go to state 19
+    LPAREN          shift and go to state 20
     NUMBER          shift and go to state 18
     IDENT           shift and go to state 15
 
     func_call                      shift and go to state 16
-    expr                           shift and go to state 39
     term                           shift and go to state 14
-    fact                           shift and go to state 20
-    expr_list                      shift and go to state 59
+    expr                           shift and go to state 41
+    expr_list                      shift and go to state 65
+    fact                           shift and go to state 21
 
-state 53
+state 57
 
     (29) while_stmt -> WHILE expr DO stmt_list OD .
 
     SEMICOLON       reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
-    ELSE            reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
-    END             reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
-    $end            reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
     OD              reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
     FI              reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
+    $end            reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
+    ELSE            reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
+    END             reduce using rule 29 (while_stmt -> WHILE expr DO stmt_list OD .)
 
 
-state 54
+state 58
+
+    (35) term -> INTP LPAREN expr RPAREN .
+
+    TIMES           reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    PLUS            reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    MINUS           reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    SEMICOLON       reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    $end            reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    OD              reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    ELSE            reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    FI              reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    END             reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    COMMA           reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    THEN            reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+    DO              reduce using rule 35 (term -> INTP LPAREN expr RPAREN .)
+
+
+state 59
+
+    (36) term -> INTP LPAREN list RPAREN .
+
+    TIMES           reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    PLUS            reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    MINUS           reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    SEMICOLON       reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    $end            reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    OD              reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    ELSE            reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    FI              reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    END             reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    RPAREN          reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    COMMA           reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    THEN            reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+    DO              reduce using rule 36 (term -> INTP LPAREN list RPAREN .)
+
+
+state 60
 
     (32) param_list -> IDENT . COMMA param_list
     (33) param_list -> IDENT .
 
-    COMMA           shift and go to state 60
+    COMMA           shift and go to state 66
     RPAREN          reduce using rule 33 (param_list -> IDENT .)
 
 
-state 55
+state 61
 
     (31) define_stmt -> DEFINE IDENT PROC LPAREN param_list . RPAREN stmt_list END
 
-    RPAREN          shift and go to state 61
+    RPAREN          shift and go to state 67
 
 
-state 56
+state 62
 
     (23) list -> LBRACKET sequence RBRACKET .
 
     COMMA           reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
     RBRACKET        reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
+    RPAREN          reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
     SEMICOLON       reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
     $end            reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
     OD              reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
@@ -978,7 +1098,7 @@ state 56
     END             reduce using rule 23 (list -> LBRACKET sequence RBRACKET .)
 
 
-state 57
+state 63
 
     (25) sequence -> listelement COMMA . sequence
     (25) sequence -> . listelement COMMA sequence
@@ -988,14 +1108,14 @@ state 57
     (23) list -> . LBRACKET sequence RBRACKET
     (24) list -> . LBRACKET RBRACKET
 
-    NUMBER          shift and go to state 47
-    LBRACKET        shift and go to state 34
+    NUMBER          shift and go to state 51
+    LBRACKET        shift and go to state 36
 
-    listelement                    shift and go to state 49
-    list                           shift and go to state 46
-    sequence                       shift and go to state 62
+    listelement                    shift and go to state 53
+    list                           shift and go to state 50
+    sequence                       shift and go to state 68
 
-state 58
+state 64
 
     (30) if_stmt -> IF expr THEN stmt_list ELSE . stmt_list FI
     (2) stmt_list -> . stmt SEMICOLON stmt_list
@@ -1017,7 +1137,7 @@ state 58
     DEFINE          shift and go to state 5
     IDENT           shift and go to state 6
 
-    stmt_list                      shift and go to state 63
+    stmt_list                      shift and go to state 69
     if_stmt                        shift and go to state 12
     define_stmt                    shift and go to state 2
     stmt                           shift and go to state 7
@@ -1026,24 +1146,24 @@ state 58
     assign_stmt_list               shift and go to state 8
     assign_stmt_expr               shift and go to state 9
 
-state 59
+state 65
 
     (10) expr_list -> expr COMMA expr_list .
 
     RPAREN          reduce using rule 10 (expr_list -> expr COMMA expr_list .)
 
 
-state 60
+state 66
 
     (32) param_list -> IDENT COMMA . param_list
     (32) param_list -> . IDENT COMMA param_list
     (33) param_list -> . IDENT
 
-    IDENT           shift and go to state 54
+    IDENT           shift and go to state 60
 
-    param_list                     shift and go to state 64
+    param_list                     shift and go to state 70
 
-state 61
+state 67
 
     (31) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN . stmt_list END
     (2) stmt_list -> . stmt SEMICOLON stmt_list
@@ -1065,7 +1185,7 @@ state 61
     DEFINE          shift and go to state 5
     IDENT           shift and go to state 6
 
-    stmt_list                      shift and go to state 65
+    stmt_list                      shift and go to state 71
     if_stmt                        shift and go to state 12
     define_stmt                    shift and go to state 2
     stmt                           shift and go to state 7
@@ -1074,53 +1194,53 @@ state 61
     assign_stmt_list               shift and go to state 8
     assign_stmt_expr               shift and go to state 9
 
-state 62
+state 68
 
     (25) sequence -> listelement COMMA sequence .
 
     RBRACKET        reduce using rule 25 (sequence -> listelement COMMA sequence .)
 
 
-state 63
+state 69
 
     (30) if_stmt -> IF expr THEN stmt_list ELSE stmt_list . FI
 
-    FI              shift and go to state 66
+    FI              shift and go to state 72
 
 
-state 64
+state 70
 
     (32) param_list -> IDENT COMMA param_list .
 
     RPAREN          reduce using rule 32 (param_list -> IDENT COMMA param_list .)
 
 
-state 65
+state 71
 
     (31) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list . END
 
-    END             shift and go to state 67
+    END             shift and go to state 73
 
 
-state 66
+state 72
 
     (30) if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .
 
     SEMICOLON       reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
-    ELSE            reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
-    FI              reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    END             reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
     $end            reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
     OD              reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
-    END             reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    ELSE            reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
+    FI              reduce using rule 30 (if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI .)
 
 
-state 67
+state 73
 
     (31) define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .
 
     SEMICOLON       reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
-    OD              reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
     FI              reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
+    OD              reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
     $end            reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
     ELSE            reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)
     END             reduce using rule 31 (define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END .)

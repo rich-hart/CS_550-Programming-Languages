@@ -40,9 +40,7 @@ class Expr :
 	def eval( self, nt, ft ) :
 		'''Given an environment and a function table, evaluates the expression,
 		returns the value of the expression (an int in this grammar)'''
-
-		raise NotImplementedError(
-			'Expr.eval: virtual method.  Must be overridden.' )
+		return 0
 
 	def display( self, nt, ft, depth=0 ) :
 		'For debugging.'
@@ -58,8 +56,16 @@ class Number( Expr ) :
 	def eval( self, nt, ft ) :
 		return self.value
 
+	@property
+	def type(self):
+		return type(self._value)
+
 	def display( self, nt, ft, depth=0 ) :
 		print "%s%i" % (tabstop*depth, self.value)
+		#print(self.value) 
+		#pass
+		
+
 
 class Ident( Expr ) :
 	'''Stores the symbol'''
@@ -167,6 +173,12 @@ class Stmt :
 		raise NotImplementedError(
 			'Stmt.display: virtual method.  Must be overridden.' )
 
+class List(Stmt):
+	def isNumber( self, nt, ft ) :
+		return 0
+		
+	def isList( self, nt, ft ) :
+		return 1
 
 class AssignStmt( Stmt ) :
 	'''adds/modifies symbol in the current context'''
@@ -183,6 +195,7 @@ class AssignStmt( Stmt ) :
 	def display( self, nt, ft, depth=0 ) :
 		print "%sAssign: %s :=" % (tabstop*depth, self.name)
 		self.rhs.display( nt, ft, depth+1 )
+
 
 class AssignListStmt( Stmt ) :
 	'''adds/modifies symbol in the current context'''
@@ -282,17 +295,7 @@ class StmtList :
 		for s in self.sl :
 			s.display( nt, ft, depth+1 )
 
-	
-class Intp_Stmt :
-	
-	def __init__( self ) :
-		self.value = 0 
 
-	def eval( self, nt, ft ) :
-		return self.value
-
- 	def display( self, nt, ft, depth=0 ) :
-		pass
 class Proc :
 	'''stores a procedure (formal params, and the body)
 

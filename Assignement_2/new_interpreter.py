@@ -115,7 +115,8 @@ reserved = {
 		'fi'		: 'FI',
 		'define': 'DEFINE',
 		'proc'	: 'PROC',
-		'end'		: 'END'
+		'end'		: 'END',
+		'intp' : 'INTP'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -136,13 +137,7 @@ t_COMMA		= r','
 t_LBRACKET	= r'\['
 t_RBRACKET	= r'\]'
 
-# these tolkens are for list functions
-t_CONS = r'cons'
-t_CAR = r'car'
-t_CDR = r'cdr'
-t_NULLP = r'nullp'
-t_INTP = r'intp'
-t_LISTP = r'listp'
+
 
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -320,10 +315,20 @@ def p_func_call( p ) :
 
 ################
 
-def p_intp( p ):
-	'''intp_stmt : INTP LPAREN expr RPAREN
-				 | INTP LPAREN list RPAREN'''
-	p[0] = p[3]
+def p_intp ( p ):
+#	'''term : INTP LPAREN list RPAREN
+#			| INTP LPAREN expr RPAREN'''
+	'''term : INTP LPAREN expr RPAREN
+			| INTP LPAREN list RPAREN'''
+	para_type = type(p[3]) 
+	list_type = type([])
+	is_List = list_type==para_type
+	in_Numb = False == is_List
+	print(in_Numb)
+	if (in_Numb) :
+		p[0] = Number(1)
+	else:
+		p[0] = Number(0)
 
 # Error rule for syntax errors
 def p_error( p ):
@@ -363,25 +368,27 @@ def test_parser( arg=sys.argv ) :
 	#	fi'''
 
 	#data = 'if 5 then x := 13 else x:=0 fi'
-
-	data = '''
-	define sum 
-	proc(n)
-	  i := n;
-	  s := 0;
-	  while i do s := s + i;  i := i-1 od;
-	  return := s
-	end;
-	y:=[1,2,[
-
-	3,4]];
-	x := 2;
-	z := 0;
-	if x then
-	  s := sum(x)
-	else
-	  x := 0
-	fi
+	data = 'x:=intp(4)'
+	#data='y:=intp([1,2,[3,4]])'
+	if False:
+		data = '''
+		define sum 
+		proc(n)
+	  	i := n;
+	  	s := 0;
+	  	while i do s := s + i;  i := i-1 od;
+	  	return := s
+		end;
+		y:=[1,2,[
+		3,4]];
+		x := 2;
+		s := 0;
+		if x then
+	  	s := sum(x)
+		else
+	  	x := 0
+		fi
+	
 	
 	
 	'''
