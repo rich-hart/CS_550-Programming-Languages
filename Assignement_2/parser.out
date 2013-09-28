@@ -1,5 +1,13 @@
 Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    CONS
+    CAR
+    NULLP
+    LISTP
+    CDR
+
 Grammar
 
 Rule 0     S' -> program
@@ -37,11 +45,16 @@ Rule 31    define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list E
 Rule 32    param_list -> IDENT COMMA param_list
 Rule 33    param_list -> IDENT
 Rule 34    func_call -> IDENT LPAREN expr_list RPAREN
+Rule 35    intp_stmt -> INTP LPAREN expr RPAREN
+Rule 36    intp_stmt -> INTP LPAREN list RPAREN
 
 Terminals, with rules where they appear
 
 ASSIGNOP             : 21 22
+CAR                  : 
+CDR                  : 
 COMMA                : 10 25 32
+CONS                 : 
 DEFINE               : 31
 DO                   : 29
 ELSE                 : 30
@@ -49,15 +62,18 @@ END                  : 31
 FI                   : 30
 IDENT                : 17 21 22 31 32 33 34
 IF                   : 30
+INTP                 : 35 36
 LBRACKET             : 23 24
-LPAREN               : 15 31 34
+LISTP                : 
+LPAREN               : 15 31 34 35 36
 MINUS                : 9
+NULLP                : 
 NUMBER               : 16 28
 OD                   : 29
 PLUS                 : 8
 PROC                 : 31
 RBRACKET             : 23 24
-RPAREN               : 15 31 34
+RPAREN               : 15 31 34 35 36
 SEMICOLON            : 2
 THEN                 : 30
 TIMES                : 13
@@ -70,12 +86,13 @@ assign_stmt          : 4
 assign_stmt_expr     : 19
 assign_stmt_list     : 20
 define_stmt          : 7
-expr                 : 8 9 10 11 15 21 29 30
+expr                 : 8 9 10 11 15 21 29 30 35
 expr_list            : 10 34
 fact                 : 13 14
 func_call            : 18
 if_stmt              : 6
-list                 : 22 27
+intp_stmt            : 
+list                 : 22 27 36
 listelement          : 25 26
 param_list           : 31 32
 program              : 0

@@ -30,6 +30,46 @@ import SetOperations
 
 from ply import lex
 
+#	Grammar:
+#		program: stmt_list 
+#		stmt_list:  stmt ';' stmt_list 
+#		    |   stmt  
+#		stmt:  assign_stmt 
+#		    |  define_stmt 
+#		    |  if_stmt 
+#		    |  while_stmt 
+#		assign_stmt : assign_stmt_expr
+#				| assign_stmt_list
+#		assign_stmt_expr : IDENT ASSIGNOP expr
+#		assign_stmt_list : IDENT ASSIGNOP list
+#		define_stmt: DEFINE IDENT PROC '(' param_list ')' stmt_list END
+#		if_stmt: IF expr THEN stmt_list ELSE stmt_list FI
+#		while_stmt: WHILE expr DO stmt_list OD
+#		param_list: IDENT ',' param_list 
+#		    |      IDENT 
+#		expr: expr '+' term   
+#		    | expr '-' term   
+#		    | term            
+#		term: term '*' factor   
+#		    | factor            
+#		factor:     '(' expr ')'  
+#		    |       NUMBER 
+#		    |       IDENT 
+#		    |       funcall 
+#		funcall:  IDENT '(' expr_list ')'
+#		expr_list: expr ',' expr_list 
+#		    |      expr 
+#		list:  '(' sequence ')' 
+#			| '(' ')'
+#		sequence: listelement ',' sequence 
+#			| listelement 
+#		listelement: list 
+#			| NUMBER
+
+
+
+
+
 tokens = (
 	'PLUS',
 	'MINUS',
@@ -52,7 +92,13 @@ tokens = (
 	'END',
 	'IDENT',
 	'LBRACKET',
-	'RBRACKET'
+	'RBRACKET',
+	'CONS',
+	'CAR',
+	'CDR',
+	'NULLP',
+	'INTP',
+	'LISTP'
 )
 
 
@@ -89,6 +135,14 @@ t_SEMICOLON = r';'
 t_COMMA		= r','
 t_LBRACKET	= r'\['
 t_RBRACKET	= r'\]'
+
+# these tolkens are for list functions
+t_CONS = r'cons'
+t_CAR = r'car'
+t_CDR = r'cdr'
+t_NULLP = r'nullp'
+t_INTP = r'intp'
+t_LISTP = r'listp'
 
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -240,6 +294,8 @@ def p_while( p ) :
 	'while_stmt : WHILE expr DO stmt_list OD'
 	p[0] = WhileStmt( p[2], p[4] )
 
+
+
 def p_if( p ) :
 	'if_stmt : IF expr THEN stmt_list ELSE stmt_list FI'
 	p[0] = IfStmt( p[2], p[4], p[6] )
@@ -261,6 +317,13 @@ def p_func_call( p ) :
   'func_call : IDENT LPAREN expr_list RPAREN'
   p[0] = FunCall( p[1], p[3] )
 
+
+################
+
+def p_intp( p ):
+	'''intp_stmt : INTP LPAREN expr RPAREN
+				 | INTP LPAREN list RPAREN'''
+	p[0] = p[3]
 
 # Error rule for syntax errors
 def p_error( p ):
@@ -312,12 +375,15 @@ def test_parser( arg=sys.argv ) :
 	y:=[1,2,[
 
 	3,4]];
-	x := 7;
+	x := 2;
+	z := 0;
 	if x then
 	  s := sum(x)
 	else
-	  x := 0 - x
+	  x := 0
 	fi
+	
+	
 	'''
 
 	#data = sys.stdin.read()

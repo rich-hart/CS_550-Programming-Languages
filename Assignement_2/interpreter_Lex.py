@@ -77,6 +77,9 @@ t_ASSIGNOP = r':='
 t_SEMICOLON = r';'
 t_COMMA		= r','
 
+
+
+
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
 	r'[a-z]+'

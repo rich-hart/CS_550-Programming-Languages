@@ -18,33 +18,6 @@
 #
 #		Procedure calls get their own environment, can not modify enclosing env
 #
-#	Grammar:
-#		program: stmt_list 
-#		stmt_list:  stmt ';' stmt_list 
-#		    |   stmt  
-#		stmt:  assign_stmt 
-#		    |  define_stmt 
-#		    |  if_stmt 
-#		    |  while_stmt 
-#		assign_stmt: IDENT ASSIGNOP expr
-#		define_stmt: DEFINE IDENT PROC '(' param_list ')' stmt_list END
-#		if_stmt: IF expr THEN stmt_list ELSE stmt_list FI
-#		while_stmt: WHILE expr DO stmt_list OD
-#		param_list: IDENT ',' param_list 
-#		    |      IDENT 
-#		expr: expr '+' term   
-#		    | expr '-' term   
-#		    | term            
-#		term: term '*' factor   
-#		    | factor            
-#		factor:     '(' expr ')'  
-#		    |       NUMBER 
-#		    |       IDENT 
-#		    |       funcall 
-#		funcall:  IDENT '(' expr_list ')'
-#		expr_list: expr ',' expr_list 
-#		    |      expr 
-#
 
 import sys
 
@@ -309,7 +282,17 @@ class StmtList :
 		for s in self.sl :
 			s.display( nt, ft, depth+1 )
 
+	
+class Intp_Stmt :
+	
+	def __init__( self ) :
+		self.value = 0 
 
+	def eval( self, nt, ft ) :
+		return self.value
+
+ 	def display( self, nt, ft, depth=0 ) :
+		pass
 class Proc :
 	'''stores a procedure (formal params, and the body)
 
