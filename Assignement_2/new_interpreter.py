@@ -116,7 +116,8 @@ reserved = {
 		'define': 'DEFINE',
 		'proc'	: 'PROC',
 		'end'		: 'END',
-		'intp' : 'INTP'
+		'intp' : 'INTP',
+		'listp' : 'listp'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -323,12 +324,17 @@ def p_intp ( p ):
 	para_type = type(p[3]) 
 	list_type = type([])
 	is_List = (list_type==para_type)
-	in_Numb = (False == is_List)
-	print(in_Numb)
-	if (in_Numb) :
-		p[0] = Number(1)
+	is_Numb = (False == is_List)
+	print(para_type)
+	print(list_type)
+	if (is_Numb) :
+		print(True)
+		p[0] = Number(int(1))
 	else:
-		p[0] = Number(0)
+		print(False)
+		p[0] = Number(int(0))
+	print(p[0].value)
+
 
 # Error rule for syntax errors
 def p_error( p ):
@@ -369,7 +375,29 @@ def test_parser( arg=sys.argv ) :
 
 	#data = 'if 5 then x := 13 else x:=0 fi'
 	#data = 'x:=intp(4)'
-	data='y:=intp([1,2,[3,4]])'
+	
+	if True:
+		data = '''
+		define sum 
+		proc(n)
+	  	i := n;
+	  	s := 0;
+	  	while i do s := s + i;  i := i-1 od;
+	  	return := s
+		end;
+		w:=[1,2,[
+		3,4]];
+		x := intp(2);
+		y := intp([]);
+		if x then
+	  	s := sum(x)
+		else
+	  	x := 0
+		fi
+	
+	
+	
+	'''
 	if False:
 		data = '''
 		define sum 
