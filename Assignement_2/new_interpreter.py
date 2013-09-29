@@ -120,7 +120,9 @@ reserved = {
 		'intp' : 'INTP',
 		'listp' : 'LISTP',
 		'nullp' : 'NULLP',
-		'cons' : 'CONS'
+		'cons' : 'CONS',
+		'car' : 'CAR',
+		'cdr' : 'CDR'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -318,6 +320,17 @@ def p_func_call( p ) :
 
 
 ################
+# car is going to have to be fixed later on so it is consitent with the language
+def p_car(p):
+	'list : CAR LPAREN list RPAREN'
+	p[0]=p[3].pop(0)
+
+
+def p_cdr(p):
+	'list : CDR LPAREN list RPAREN'
+	p[3].pop(0)
+	p[0]=p[3]
+
 def p_cons(p):
 	'list : CONS LPAREN expr COMMA list RPAREN'
 	p[0]=[]
@@ -436,6 +449,8 @@ def test_parser( arg=sys.argv ) :
 		r := listp([]);
 		t:=nullp([]);
 		u:=cons(1,[[3,4]]);
+		v:=car([1,[2,3]]);
+		z:=cdr([1,[2,3],4]);
 		x := intp(2);
 		y := intp([]);
 		if x then
