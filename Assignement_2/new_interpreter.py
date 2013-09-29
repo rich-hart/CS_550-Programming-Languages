@@ -98,7 +98,8 @@ tokens = (
 	'CDR',
 	'NULLP',
 	'INTP',
-	'LISTP'
+	'LISTP',
+	'NULLP'
 )
 
 
@@ -117,7 +118,9 @@ reserved = {
 		'proc'	: 'PROC',
 		'end'		: 'END',
 		'intp' : 'INTP',
-		'listp' : 'listp'
+		'listp' : 'LISTP',
+		'nullp' : 'NULLP',
+		'cons' : 'CONS'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -315,6 +318,9 @@ def p_func_call( p ) :
 
 
 ################
+def p_cons(p):
+	'list : CONS LPAREN expr COMMA list RPAREN'
+	p[0] = p[5].insert(0,p[3])
 
 def p_intp ( p ):
 #	'''term : INTP LPAREN list RPAREN
@@ -335,6 +341,40 @@ def p_intp ( p ):
 		p[0] = Number(int(0))
 	print(p[0].value)
 
+def p_listp ( p ):
+#	'''term : INTP LPAREN list RPAREN
+#			| INTP LPAREN expr RPAREN'''
+	'''term : LISTP LPAREN expr RPAREN
+			| LISTP LPAREN list RPAREN'''
+	para_type = type(p[3]) 
+	list_type = type([])
+	is_List = (list_type==para_type)
+	is_Numb = (False == is_List)
+	print(para_type)
+	print(list_type)
+	if (is_List) :
+		print(True)
+		p[0] = Number(int(1))
+	else:
+		print(False)
+		p[0] = Number(int(0))
+	print(p[0].value)
+	
+def p_nullp ( p ):
+#	'''term : INTP LPAREN list RPAREN
+#			| INTP LPAREN expr RPAREN'''
+	'term : NULLP LPAREN list RPAREN'
+	para_type = type(p[3]) 
+	list_type = type([])
+	is_null = (p[3]==[])
+	print(is_null)
+	if (is_null) :
+		print(True)
+		p[0] = Number(int(1))
+	else:
+		print(False)
+		p[0] = Number(int(0))
+	print(p[0].value)
 
 # Error rule for syntax errors
 def p_error( p ):
@@ -387,6 +427,9 @@ def test_parser( arg=sys.argv ) :
 		end;
 		w:=[1,2,[
 		3,4]];
+		q := listp(2);
+		r := listp([]);
+		t:=nullp([]);
 		x := intp(2);
 		y := intp([]);
 		if x then
