@@ -320,7 +320,12 @@ def p_func_call( p ) :
 ################
 def p_cons(p):
 	'list : CONS LPAREN expr COMMA list RPAREN'
-	p[0] = p[5].insert(0,p[3])
+	p[0]=[]
+	index = 0
+	p[0].insert(index,p[3].value)
+	for value in p[5]:
+		p[0].append(value)
+	
 
 def p_intp ( p ):
 #	'''term : INTP LPAREN list RPAREN
@@ -430,6 +435,7 @@ def test_parser( arg=sys.argv ) :
 		q := listp(2);
 		r := listp([]);
 		t:=nullp([]);
+		u:=cons(1,[[3,4]]);
 		x := intp(2);
 		y := intp([]);
 		if x then
