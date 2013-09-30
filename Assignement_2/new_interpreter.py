@@ -99,7 +99,8 @@ tokens = (
 	'NULLP',
 	'INTP',
 	'LISTP',
-	'NULLP'
+	'NULLP',
+	'CONCAT'
 )
 
 
@@ -122,7 +123,8 @@ reserved = {
 		'nullp' : 'NULLP',
 		'cons' : 'CONS',
 		'car' : 'CAR',
-		'cdr' : 'CDR'
+		'cdr' : 'CDR',
+		'||' : 'CONCAT'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -142,7 +144,7 @@ t_SEMICOLON = r';'
 t_COMMA		= r','
 t_LBRACKET	= r'\['
 t_RBRACKET	= r'\]'
-
+t_CONCAT = r'\|\|'
 
 
 def t_IDENT( t ):
@@ -394,6 +396,10 @@ def p_nullp ( p ):
 		p[0] = Number(int(0))
 	print(p[0].value)
 
+def p_concat(p):
+	'list : list CONCAT list'
+	p[0] = p[1]+p[3]
+
 # Error rule for syntax errors
 def p_error( p ):
 	print "Syntax error in input!", str( p )
@@ -446,6 +452,7 @@ def test_parser( arg=sys.argv ) :
 		a:=1+3;
 		w:=[1,2,[
 		3,4]];
+		b:= [3] || [5];
 		q := listp(2);
 		r := listp([]);
 		t:=nullp([]);
