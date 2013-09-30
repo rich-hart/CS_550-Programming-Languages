@@ -433,7 +433,7 @@ def test_parser( arg=sys.argv ) :
 
 	#data = 'if 5 then x := 13 else x:=0 fi'
 	#data = 'x:=intp(4)'
-	
+
 	if True:
 		data = '''
 		define sum 
@@ -443,6 +443,7 @@ def test_parser( arg=sys.argv ) :
 	  	while i do s := s + i;  i := i-1 od;
 	  	return := s
 		end;
+		a:=1+3;
 		w:=[1,2,[
 		3,4]];
 		q := listp(2);
