@@ -99,7 +99,6 @@ tokens = (
 	'NULLP',
 	'INTP',
 	'LISTP',
-	'NULLP',
 	'CONCAT'
 )
 
@@ -124,7 +123,6 @@ reserved = {
 		'cons' : 'CONS',
 		'car' : 'CAR',
 		'cdr' : 'CDR',
-		'||' : 'CONCAT'
 		}
 
 # Now, this section.  We have a mapping, REs to token types (please note
@@ -145,8 +143,6 @@ t_COMMA		= r','
 t_LBRACKET	= r'\['
 t_RBRACKET	= r'\]'
 t_CONCAT = r'\|\|'
-
-
 def t_IDENT( t ):
 	#r'[a-zA-Z_][a-zA-Z_0-9]*'
 	r'[a-z]+'
@@ -274,6 +270,7 @@ def p_list(p):
 		p[0] =p[2]
 	else:
 		p[0] = []
+	
 
 def p_sequence(p):
 	'''sequence : listelement COMMA sequence
@@ -351,15 +348,15 @@ def p_intp ( p ):
 	list_type = type([])
 	is_List = (list_type==para_type)
 	is_Numb = (False == is_List)
-	print(para_type)
-	print(list_type)
+	#print(para_type)
+	#rprint(list_type)
 	if (is_Numb) :
-		print(True)
+		#print(True)
 		p[0] = Number(int(1))
 	else:
-		print(False)
+		#print(False)
 		p[0] = Number(int(0))
-	print(p[0].value)
+	#print(p[0].value)
 
 def p_listp ( p ):
 #	'''term : INTP LPAREN list RPAREN
@@ -370,15 +367,15 @@ def p_listp ( p ):
 	list_type = type([])
 	is_List = (list_type==para_type)
 	is_Numb = (False == is_List)
-	print(para_type)
-	print(list_type)
+	#print(para_type)
+	#print(list_type)
 	if (is_List) :
 		print(True)
 		p[0] = Number(int(1))
 	else:
 		print(False)
 		p[0] = Number(int(0))
-	print(p[0].value)
+	#print(p[0].value)
 	
 def p_nullp ( p ):
 #	'''term : INTP LPAREN list RPAREN
@@ -387,18 +384,19 @@ def p_nullp ( p ):
 	para_type = type(p[3]) 
 	list_type = type([])
 	is_null = (p[3]==[])
-	print(is_null)
+	#print(is_null)
 	if (is_null) :
 		print(True)
 		p[0] = Number(int(1))
 	else:
 		print(False)
 		p[0] = Number(int(0))
-	print(p[0].value)
+	#print(p[0].value)
+
 
 def p_concat(p):
-	'list : list CONCAT list'
-	p[0] = p[1]+p[3]
+	'term : term CONCAT fact'
+	p[0] = Plus( p[1], p[3] )
 
 # Error rule for syntax errors
 def p_error( p ):
@@ -444,6 +442,36 @@ def test_parser( arg=sys.argv ) :
 		data = '''
 		define sum 
 		proc(n)
+	  	i := 1||1;
+	  	s := 0;
+	  	while i do s := s + i;  i := i-1 od;
+	  	return := s
+		end;
+		a:=1+3;
+		w:=[1,2,[
+		3,4]];
+		q := listp(2);
+		r := listp([]);
+		t:=nullp([]);
+		u:=cons(1,[[3,4]]);
+		v:=car([1,[2,3]]);
+		z:=cdr([1,[2,3],4]);
+		x := intp(2);
+		y := intp([]);
+		if x then
+	  	s := sum(x)
+		else
+	  	x := 0
+		fi
+	
+	
+	
+	'''
+	
+	if False:
+		data = '''
+		define sum 
+		proc(n)
 	  	i := n;
 	  	s := 0;
 	  	while i do s := s + i;  i := i-1 od;
@@ -452,7 +480,6 @@ def test_parser( arg=sys.argv ) :
 		a:=1+3;
 		w:=[1,2,[
 		3,4]];
-		b:= [3] || [5];
 		q := listp(2);
 		r := listp([]);
 		t:=nullp([]);
@@ -493,7 +520,8 @@ def test_parser( arg=sys.argv ) :
 	
 	'''
 
-	#data = sys.stdin.read()
+	if False:
+		data = sys.stdin.read()
 
 	yacc.parse( data )
 
