@@ -54,7 +54,7 @@ def p_listelement(p):
 
 def p_error(p):
     if p:
-        print("Syntax error at '%s'" % p.value)
+        print("List Grammer: Syntax error at '%s'" % p.value)
     else:
         print("Syntax error at EOF")
 

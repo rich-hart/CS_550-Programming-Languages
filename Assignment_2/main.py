@@ -9,27 +9,26 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 
 import sys
 import os
+import imp
 
-import ply.lex as lex
-import ply.yacc as yacc
 
-from list_parser import *
 
-lex.lex()
-yacc.yacc()
+from new_language import * 
+
 
 
 
 def main( arg=sys.argv ) :
-	
-	input_file_path=os.path.abspath('.')+'/sample.txt'
-	if not os.path.isfile(input_file_path):
-			input_file_path=os.path.abspath('..')+'/sample.txt'
+	print(tokens)
+	input_file_path=os.path.abspath('.')+'/sample_mini.p'
+	#input_file_path=os.path.abspath('.')+'/sample_part_1_2.p'
 	Input_File = open(input_file_path,'r')
 	raw_file = Input_File.read()
-	print "raw_file: " + raw_file
+	print "raw_file:\n\n " + raw_file
+	print "Output:\n\n "
 	result = yacc.parse(raw_file)
-	print "parsed file: "+ result
+	print(result)
+	
 
 if __name__ == '__main__' :
 	main()

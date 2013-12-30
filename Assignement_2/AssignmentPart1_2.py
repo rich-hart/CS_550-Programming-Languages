@@ -27,7 +27,8 @@ import ply.yacc as yacc
 yacc.yacc()
 
 def main( arg=sys.argv ) :
-	input_file_path=os.path.abspath('.')+'/sample.txt'
+	input_file_path=os.path.abspath('.')+'/sum.txt'
+	#input_file_path=os.path.abspath('.')+'/sample.txt'
 	if not os.path.isfile(input_file_path):
 			input_file_path=os.path.abspath('..')+'/sample.txt'
 	Input_File = open(input_file_path,'r')
