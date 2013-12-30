@@ -74,8 +74,22 @@ def p_start_list( p ) :
 	p[0]=List(p[1])
 
 
-#from Part_1_2.list_parser import *
+def p_assn( p ) :
+	'assign_stmt : IDENT ASSIGNOP expr'
+	p[0] = AssignStmt( p[1], p[3] )
 
+def p_assn_list( p ) :
+	'assign_list_stmt : IDENT ASSIGNOP list'
+	p[0] = AssignListStmt( p[1], p[3] )
+
+def p_stmt( p ) :
+	'''stmt : assign_stmt
+				| assign_list_stmt 
+				| while_stmt
+				| if_stmt
+				| define_stmt'''
+	p[0] = p[1]
+#from Part_1_2.list_parser import *
 lex.lex()
 yacc.yacc()
 

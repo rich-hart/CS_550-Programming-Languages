@@ -5,7 +5,7 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'e\xfa\xd3\xfa\xe5a\xe9\xf2F\xb7N\xa7\x88\xc6\x03\xfc'
+_lr_signature = '\x92\xd9\xe2\xd3\xb6EA\x7f\xdb\xb1\xa0|\xe8F\xbb5'
     
 _lr_action_items = {'LBRACKET':([0,1,9,],[1,1,1,]),'RBRACKET':([1,3,4,5,6,7,8,10,],[6,8,-5,-6,-2,-4,-1,-3,]),'COMMA':([4,5,6,7,8,],[-5,-6,-2,9,-1,]),'NUMBER':([1,9,],[5,5,]),'$end':([2,6,8,],[0,-2,-1,]),}
 
@@ -35,13 +35,16 @@ _lr_productions = [
   ('start_program -> program','start_program',1,'p_start_program','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',64),
   ('start_program -> list','start_program',1,'p_start_program','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',65),
   ('start_list -> list','start_list',1,'p_start_list','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',73),
+  ('assign_stmt -> IDENT ASSIGNOP expr','assign_stmt',3,'p_assn','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',78),
+  ('assign_list_stmt -> IDENT ASSIGNOP list','assign_list_stmt',3,'p_assn_list','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',82),
+  ('stmt -> assign_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',86),
+  ('stmt -> assign_list_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',87),
+  ('stmt -> while_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',88),
+  ('stmt -> if_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',89),
+  ('stmt -> define_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/new_language.py',90),
   ('program -> stmt_list','program',1,'p_program','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',125),
   ('stmt_list -> stmt SEMICOLON stmt_list','stmt_list',3,'p_stmt_list','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',133),
   ('stmt_list -> stmt','stmt_list',1,'p_stmt_list','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',134),
-  ('stmt -> assign_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',143),
-  ('stmt -> while_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',144),
-  ('stmt -> if_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',145),
-  ('stmt -> define_stmt','stmt',1,'p_stmt','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',146),
   ('expr -> expr PLUS term','expr',3,'p_add','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',150),
   ('expr -> expr MINUS term','expr',3,'p_sub','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',154),
   ('expr_list -> expr COMMA expr_list','expr_list',3,'p_expr_list','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',158),
@@ -54,7 +57,6 @@ _lr_productions = [
   ('fact -> IDENT','fact',1,'p_fact_IDENT','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',187),
   ('fact -> func_call','fact',1,'p_fact_funcall','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',191),
   ('fact -> NAME','fact',1,'p_fact_name','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',195),
-  ('assign_stmt -> IDENT ASSIGNOP expr','assign_stmt',3,'p_assn','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',203),
   ('while_stmt -> WHILE expr DO stmt_list OD','while_stmt',5,'p_while','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',207),
   ('if_stmt -> IF expr THEN stmt_list ELSE stmt_list FI','if_stmt',7,'p_if','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',211),
   ('define_stmt -> DEFINE IDENT PROC LPAREN param_list RPAREN stmt_list END','define_stmt',8,'p_def','/Users/richardhart/ProgrammingLangauges/CS_550-Programming-Languages/Assignment_2/Mini/interpreter.py',215),

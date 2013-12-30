@@ -93,7 +93,6 @@ def t_IDENT( t ):
 
 def t_NUMBER( t ) :
 	r'[0-9]+'
-
 		# t.value holds the string that matched.  Dynamic typing - no unions
 	t.value = int( t.value )
 	return t
